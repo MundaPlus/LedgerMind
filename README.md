@@ -1,46 +1,57 @@
 # LedgerMind
 
-> A self-hosted personal finance platform with AI-powered insights, investment tracking, and automated reporting — built for individuals and small businesses who want full control over their financial data.
+**A self-hosted personal finance tracker with an AI assistant and an API for agents.** LedgerMind brings bank accounts, credit cards, loans, budgets, investments and physical assets into one private dashboard, and makes the numbers line up with what the bank says.
 
-![Status](https://img.shields.io/badge/status-active-brightgreen)
+It runs on your own server for a single owner. An AI assistant answers questions about your finances in plain language, using a local Ollama model or a cloud model through OpenRouter.
 
-## Overview
+<!-- screenshots -->
 
-LedgerMind solves the problem of scattered financial data and reactive money management. It brings transactions, budgets, investments, assets, and debts into a single private dashboard — with an AI assistant that can answer questions about your finances in plain language. Unlike cloud-based alternatives, all data stays on infrastructure you control, with no third-party data sharing.
+## Features
 
-## Key Capabilities
+- **Transactions.** Create, edit, categorise, tag and split transactions, with templates for common entries and bulk import from CSV, OFX and QIF bank exports.
+- **Revolut and bank sync.** Revolut statements import as one account covering the current account, savings vaults and pockets. Bank accounts can also be linked through GoCardless for automatic account creation, transaction sync and balance reconciliation.
+- **Own transfers recognised.** Money moved between your own accounts, card payments and top-ups are matched instead of showing up as income and spending.
+- **Accounts and net worth.** Bank accounts with overdraft limits, savings, credit cards, loans and assets, with a net worth trend built from month-end balances.
+- **Loan repayment plans.** Import the bank's repayment plan; payments are matched to instalments and only principal lowers the balance. The debt planner shows remaining interest, payoff dates, avalanche and snowball strategies, and what an extra payment would change.
+- **Credit cards.** Paid-in-full cards record each payment as that month's spending; revolving cards track the amount owed from entered statements.
+- **Recurring payments.** Expected bills, subscriptions and salary are suggested from history and matched against each import, with a notice when a payment is missing or its amount changes. They feed a cashflow calendar and a forecast.
+- **Budgets, goals and spending.** Monthly category budgets with alerts, savings goals with milestones, and a spending page with a category-by-month table that drills down to merchants and transactions.
+- **Analytics.** Spending by category and merchant, income against expenses, savings rate, trends and runway, filterable by period.
+- **AI assistant and advisor.** A chat that answers questions about your data, a proactive advisor that points out spending patterns and budget risks, and AI suggestions for category rules.
+- **Investments.** Holdings, value, gain on cost and contributions against growth, read from a local FinBellTower instance (a separate project). The last good snapshot is kept and shown as stale if FinBellTower is unreachable.
+- **Assets.** Vehicles, property, collectibles and electronics at cost and current value; Magic: The Gathering collections can be valued from EchoMTG.
+- **Shared expenses** with per-participant settlement status.
+- **Monthly reports.** A PDF digest of income, expenses, budgets and net worth change, sent by email.
+- **Agent API.** A bearer-token REST API so external AI agents and scripts can read and write the ledger, plus a machine-readable API manual designed to be pasted into an agent's system prompt.
+- **Security and housekeeping.** Password login with TOTP two-factor authentication, encrypted storage for third-party credentials, an audit log, backup and restore, and an in-app changelog.
+- **Installable PWA** with a layout for phone and tablet.
 
-- **Complete financial picture** — track bank accounts, credit cards, savings, investments, physical assets, and liabilities in one place, with net worth updated in real time
-- **AI-powered analysis** — ask your finances anything in plain language; a proactive advisor surfaces spending patterns, budget risks, and saving opportunities without being asked
-- **Automated reporting** — monthly PDF summaries delivered by email, covering income, expenses, budget performance, and net worth movement
-- **Investment and asset tracking** — live market prices for stocks, ETFs, and crypto; collectible collections (including Magic: The Gathering via EchoMTG) valued automatically from external sources
-- **Smart recurring transactions** — bills and subscriptions are detected automatically from transaction history and managed through a cashflow calendar that shows every expected payment
-- **Debt payoff planning** — models avalanche and snowball strategies across multiple loans and credit cards, projecting payoff dates and total interest saved
-- **External automation interface** — a secure REST API allows external tools and AI agents to read and write financial data, enabling integrations and custom workflows
+## Tech stack
 
-## Tech Highlights
+Python · FastAPI · SQLAlchemy 2 · Alembic · SQLite · React 18 · Vite · Ollama · OpenRouter · GoCardless Bank Account Data · SMTP / Mailgun · Docker or systemd + nginx
 
-| Layer | Technology |
-|-------|------------|
-| Backend | Python, FastAPI |
-| Frontend | React (PWA — installable on mobile) |
-| AI | Local (Ollama) or cloud (OpenRouter) — configurable |
-| Market data | Yahoo Finance (no subscription required) |
-| Email delivery | SMTP or Mailgun |
-| Authentication | Password + optional two-factor authentication (TOTP) |
+## How it works
 
-## Screenshots
+```
+bank exports / Revolut / GoCardless ──> import + matching ──> SQLite ledger
+                                          (transfers, cards,      │
+                                           loans, recurring)      │
+FinBellTower (local, read-only) ──> investment snapshot ─────────┤
+                                                                  v
+                         React PWA  <──  FastAPI  ──>  Agent API, AI chat, advisor,
+                                                        monthly PDF report
+```
 
-> *Screenshots available on request.*
+The backend is a FastAPI service over a SQLite database, and the frontend is a React app served as a PWA. A scheduler heartbeat runs the periodic checks: budget alerts, recurring-payment matching, milestones and the investment refresh. Settings can come from the environment or be changed in the UI, where stored values take precedence.
 
-## Status & Availability
+## Availability
 
-LedgerMind is actively developed and in production use. Core features — transactions, budgets, investments, analytics, and AI chat — are stable. Active development continues on extended integrations and reporting capabilities. The platform is designed for private self-hosted deployment; it is not offered as a public SaaS product. Custom deployment and white-labelling arrangements can be discussed.
+The source code is not public. LedgerMind is available for licensing, custom deployment or white-label adaptation. Get in touch via [munda.si](https://www.munda.si/#contact).
 
-## Interested?
+## License
 
-This is a proprietary project by **Munda Plus d.o.o.**  
-The full codebase is available for review upon request.
+Proprietary. © 2026 MUNDA PLUS d.o.o. All rights reserved. See [LICENSE](LICENSE).
 
-📧 marko@munda.si  
-🌐 [munda.si](https://www.munda.si)
+## Author
+
+Built by [Marko Munda](https://www.munda.si/) · [Munda Plus](https://github.com/MundaPlus)
