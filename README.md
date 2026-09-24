@@ -4,7 +4,15 @@
 
 It runs on your own server for a single owner. An AI assistant answers questions about your finances in plain language, using a local Ollama model or a cloud model through OpenRouter.
 
-<!-- screenshots -->
+![Dashboard](screenshots/dashboard.jpg)
+
+> Screenshots show a demo instance with sample data.
+
+| Spending by category and month | Recurring payments |
+|---|---|
+| ![Spending table by category and month](screenshots/spending.jpg) | ![Recurring rules matched against imports](screenshots/recurring.jpg) |
+
+![Debt planner with a loan repayment plan](screenshots/debt-planner.jpg)
 
 ## Features
 
